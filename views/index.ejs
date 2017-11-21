@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>main</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // this triggers the connection event in our server!
+            var socket = io.connect();
+            // we'll write all the socket stuff after the above line!
+            $('.btn-count').click(function () {
+                socket.emit("button_count", { reason: "button clicked" });
+            });
+            $('.btn-reset').click(function () {
+                socket.emit("button_reset", { reason: "button clicked" });
+            });
+            socket.on('server_response', function (data) {
+                console.log('The server says: ' + data.reason);
+                $('.res').html("<h2>" + "The button has been clicked " + data.count + " times" + "</h2>")
+            });
+        })
+    </script>
+
+<body>
+    <div class="container">
+        <h3>Welcome to Button Clicker</h3>
+        <div class="res">Hello </div>
+        <p>please click the button to count</p>
+        <button class="btn btn-primary btn-count">Count</button>
+        <button class="btn btn-danger btn-reset">Reset</button>
+    </div>
+</body>
+
+</html>
